@@ -1,0 +1,14 @@
+{
+  "textureAtlas": {
+    "texture": "run01.png",
+    "regionWidth": 150,
+    "regionHeight": 150
+  },
+  "cycles": {
+    "run": {
+      "frames": [0,1,2,3,4,5,6,7],
+      "isLooping": false,
+      "frameDuration": 0.2
+    }
+  }
+}

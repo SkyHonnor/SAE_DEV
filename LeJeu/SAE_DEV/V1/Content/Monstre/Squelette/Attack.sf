@@ -1,0 +1,14 @@
+{
+  "textureAtlas": {
+    "texture": "attack01.png",
+    "regionWidth": 150,
+    "regionHeight": 150
+  },
+  "cycles": {
+    "attack": {
+      "frames": [0,1,2,3,4,5,6,7],
+      "isLooping": false,
+      "frameDuration": 0.2
+    }
+  }
+}

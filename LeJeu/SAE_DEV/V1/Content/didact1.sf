@@ -1,0 +1,19 @@
+{
+  "textureAtlas": {
+    "texture": "didact.png",
+    "regionWidth": 12,
+    "regionHeight": 13
+  },
+  "cycles": {
+    "idle": {
+      "frames": [0,1],
+      "isLooping": true,
+      "frameDuration": 0.5
+    },
+    "press": {
+      "frames": [2],
+      "isLooping": false,
+      "frameDuration": 0.2
+    }
+  }
+}
