@@ -41,7 +41,7 @@ namespace TheGame
             // TODO: Add your initialization logic here
             _perso = new Joueur(1, "OwO", new Vector2(296, 105), 3, (float)0.15, false, false, 10, 10, 0, 0, 0, Keys.Z, Keys.S, Keys.D, Keys.Q,GraphicsDevice);
 
-            _lesBoutons = new Bouton[] { new Bouton(1, "Start", new Vector2(_widthWindow / 2, _heightWindow / 2)), new Bouton(1, "Exit", new Vector2(_widthWindow / 2, _heightWindow / 2 + 220)), new Bouton(1, "?", new Vector2(_widthWindow - 150, _heightWindow / 2 + 220)) };
+            _lesBoutons = new Bouton[] { new Bouton(1, "Start", new Vector2(_widthWindow / 2, _heightWindow / 2)), new Bouton(1, "Exit", new Vector2(_widthWindow / 2, _heightWindow / 2 + 220)), new Bouton(1, "?", new Vector2(_widthWindow - 150, _heightWindow / 2 + 220)), new Bouton(2, "Pause", new Vector2(_widthWindow / 2, _heightWindow / 2)), new Bouton(2, "Exit", new Vector2(_widthWindow / 2, _heightWindow / 2 + 220)) };
             _hud = new HUD(true, 1, _lesBoutons);
             _gobelin = new Monstre(new Vector2(500, 500), this, 2, 32);
             _gobelin.Init();
@@ -67,6 +67,10 @@ namespace TheGame
             _lesBoutons[1].TextureBouton = new AnimatedSprite(spriteSheet);
             spriteSheet = Content.Load<SpriteSheet>("PBoutonAssetsf.sf", new JsonContentLoader());
             _lesBoutons[2].TextureBouton = new AnimatedSprite(spriteSheet);
+            spriteSheet = Content.Load<SpriteSheet>("GBoutonAssetsf.sf", new JsonContentLoader());
+            _lesBoutons[3].TextureBouton = new AnimatedSprite(spriteSheet);
+            spriteSheet = Content.Load<SpriteSheet>("GBoutonAssetsf.sf", new JsonContentLoader());
+            _lesBoutons[4].TextureBouton = new AnimatedSprite(spriteSheet);
 
             _font = Content.Load<SpriteFont>("font");
 
@@ -78,23 +82,40 @@ namespace TheGame
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            _hud.Update(gameTime);
+
+            
+            
             float deltaSeconds = (float)gameTime.ElapsedGameTime.TotalSeconds; // DeltaTime
 
             _hud.Update(gameTime);
 
-            if (_hud.QuiEstClicker(out Bouton boutonclicker) && boutonclicker.NomBouton == "Exit")
+            if (_hud.QuiEstClicker(out Bouton boutonclicker) && boutonclicker.NomBouton == "Exit" && _hud.Actif == true)
                 Exit();
-            else if (_hud.QuiEstClicker(out boutonclicker) && boutonclicker.NomBouton == "Start")
+            else if (_hud.QuiEstClicker(out boutonclicker) && boutonclicker.NomBouton == "Start" && _hud.Actif == true && _hud.NumMenu == 1)
                 _hud.Actif = false;
+            else if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) && _hud.Actif == false)
+            {
+                _hud.NumMenu = 2;
+                _hud.Actif = true;
+            }
+            else if (_hud.QuiEstClicker(out boutonclicker) && boutonclicker.NomBouton == "Pause") 
+            {
+                _hud.Actif = false;
+            }
+            
 
 
-            _perso.Update(gameTime, _mapManager.CurrentMap);
-            _gobelin.Update(_perso, gameTime, deltaSeconds,_mapManager.CurrentMap);
-            _hud.Update(gameTime);
+            if (!_hud.Actif == true)
+            {
+                _perso.Update(gameTime, _mapManager.CurrentMap);
+                _gobelin.Update(_perso, gameTime, deltaSeconds, _mapManager.CurrentMap);
 
-            _mapManager.Update(gameTime);
+
+                _mapManager.Update(gameTime);
+            }
+
+            
 
             base.Update(gameTime);
             
