@@ -145,6 +145,7 @@ namespace TheGame
             }
             return min;
         }
+
         public Vector2 Avance(Joueur cible, GameTime gameTime, Map map)
         {
             float second = gameTime.GetElapsedSeconds();
@@ -166,6 +167,7 @@ namespace TheGame
             {
                 this.direction = new Vector2(0, 0);
             }
+            
             
             this.position += direction * second * VITESSE_GOBLIN;
             return direction;
@@ -201,12 +203,13 @@ namespace TheGame
         }
         public void Update(Joueur cible, GameTime gameTime,float deltaSecond,Map map)
         {
+
+
             Avance(cible, gameTime,map);
             JouerUneAnimation(deltaSecond);
         }
         
-
-        
+                
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(this.AnimationPrincipal, this.Position);

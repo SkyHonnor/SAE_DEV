@@ -136,17 +136,32 @@ namespace TheGame
         }
 
 
-        public void Update(Joueur cible,GameTime gameTime , float deltaSecond,Map map)
+        public void Update(List<Joueur> joueurs,GameTime gameTime , float deltaSecond,Map map)
         {
+
             if (id == 1)
             {
-                Squelette.Update(cible, gameTime, deltaSecond,map); 
+                Squelette.Update(CiblePlusProche(joueurs), gameTime, deltaSecond,map); 
             }
             else
             {
-                Goblin.Update(cible, gameTime, deltaSecond,map);
+                Goblin.Update(CiblePlusProche(joueurs), gameTime, deltaSecond,map);
             }
 
+        }
+
+        public Joueur CiblePlusProche(List<Joueur> listjoueurs)
+        {
+            Joueur joueurLePlusProche = listjoueurs[0];
+
+            foreach (Joueur i in listjoueurs)
+            {
+                if (Vector2.Distance(Position, joueurLePlusProche.PositionJoueur) > Vector2.Distance(Position, i.PositionJoueur))
+                {
+                    joueurLePlusProche = i;
+                }
+            }
+            return joueurLePlusProche;
         }
         public void Draw(SpriteBatch spriteBatch)
         {

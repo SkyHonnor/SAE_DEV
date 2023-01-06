@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace TheGame
@@ -12,7 +13,12 @@ namespace TheGame
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Joueur _perso;
+
+        private Joueur _perso1;
+        private Joueur _perso2;
+
+        private List<Joueur> _listJoueur;
+
         private Monstre _gobelin;
 
         private HUD _hud;
@@ -39,7 +45,12 @@ namespace TheGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            _perso = new Joueur(1, "OwO", new Vector2(296, 105), 3, (float)0.15, false, false, 10, 10, 0, 0, 0, Keys.Z, Keys.S, Keys.D, Keys.Q,GraphicsDevice);
+            _perso1 = new Joueur(1, "OwO", new Vector2(296, 105), 3, (float)0.15, false, false, 10, 10, 0, 0, 0, Keys.Z, Keys.S, Keys.D, Keys.Q, GraphicsDevice);
+            _perso2 = new Joueur(2, "UwU", new Vector2(296, 105), 3, (float)0.15, false, false, 10, 10, 0, 0, 0, Keys.Up, Keys.Down, Keys.Right, Keys.Left, GraphicsDevice);
+
+            _listJoueur = new List<Joueur>();
+            _listJoueur.Add(_perso1);
+            _listJoueur.Add(_perso2);
 
             _lesBoutons = new Bouton[] { new Bouton(1, "Start", new Vector2(_widthWindow / 2, _heightWindow / 2)), new Bouton(1, "Exit", new Vector2(_widthWindow / 2, _heightWindow / 2 + 220)), new Bouton(1, "?", new Vector2(_widthWindow - 150, _heightWindow / 2 + 220)), new Bouton(2, "Pause", new Vector2(_widthWindow / 2, _heightWindow / 2)), new Bouton(2, "Exit", new Vector2(_widthWindow / 2, _heightWindow / 2 + 220)) };
             _hud = new HUD(true, 1, _lesBoutons);
@@ -59,7 +70,9 @@ namespace TheGame
             _graphics.ApplyChanges();
 
             SpriteSheet spriteSheet = Content.Load<SpriteSheet>("animationPersoBleu.sf", new JsonContentLoader());
-            _perso.TextureJoueur = new AnimatedSprite(spriteSheet);
+            _perso1.TextureJoueur = new AnimatedSprite(spriteSheet);
+            spriteSheet = Content.Load<SpriteSheet>("animationPersoBleu.sf", new JsonContentLoader());
+            _perso2.TextureJoueur = new AnimatedSprite(spriteSheet);
 
             spriteSheet = Content.Load<SpriteSheet>("GBoutonAssetsf.sf", new JsonContentLoader());
             _lesBoutons[0].TextureBouton = new AnimatedSprite(spriteSheet);
@@ -108,8 +121,10 @@ namespace TheGame
 
             if (!_hud.Actif == true)
             {
-                _perso.Update(gameTime, _mapManager.CurrentMap);
-                _gobelin.Update(_perso, gameTime, deltaSeconds, _mapManager.CurrentMap);
+                _perso1.Update(gameTime, _mapManager.CurrentMap);
+                _perso2.Update(gameTime, _mapManager.CurrentMap);
+
+                _gobelin.Update(_listJoueur, gameTime, deltaSeconds, _mapManager.CurrentMap);
 
 
                 _mapManager.Update(gameTime);
@@ -131,7 +146,10 @@ namespace TheGame
             
 
             _gobelin.Draw(_spriteBatch);
-            _perso.Draw(_spriteBatch);
+
+            _perso1.Draw(_spriteBatch);
+            _perso2.Draw(_spriteBatch);
+
             _hud.Draw(_spriteBatch);
             _spriteBatch.End();
             
